@@ -403,9 +403,9 @@ Steps to install:
      If you're just running PostgreSQL on the same server, you can
      either specify `-h localhost` or remove the `-h` option and
      argument entirely (since localhost is the default).  For the
-     postgres username and password, put in the correct values
-     ("postgres" for both, if you've been using the defaults from
-     these instructions), and similarly "checkbook" for the db name.
+     postgres username and password, put in the correct values, which
+     are "postgres" for both if you've been using the defaults from
+     these instructions, and similarly "checkbook" for the db name.
      
 11. Optionally install Fonts.
 
