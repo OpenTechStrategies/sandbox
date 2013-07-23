@@ -406,7 +406,8 @@ Steps to install:
      postgres username and password, put in the correct values
      ("postgres" for both, if you've been using the defaults from
      these instructions), and similarly "checkbook" for the db name.
-11. Install or Modify Fonts.
+
+11.  Install or Modify Fonts.
 
     *This step is optional.  Without it, Checkbook just won't look
     quite the same as it looks at <http://checkbooknyc.com/>, and if
