@@ -335,6 +335,7 @@ Steps to install:
 
 10. Configure the rest of the webapp's `settings.php`.
 
+   **Solr:**
    - URL of Solr instance:
 
             //Solr URL
@@ -343,6 +344,30 @@ Steps to install:
      You can change the value to "`http://localhost:8080/solr-checkbook`",
      assuming a deployment where everything runs on one server.
 
+   **DB settings:**
+   - Update the psql command in the obvious ways.  Again, there is no actual
+     backslash nor linebreak after it:
+
+            // update the command for psql.
+            $conf['check_book']['data_feeds']['command'] = \
+            'PGPASSWORD=<password> psql -h <postgres-db-ip> -U <postgres-db-user> <postgresdb-name>'
+
+     If you're just running PostgreSQL on the same server, you can
+     either specify `-h localhost` or remove the `-h` option and
+     argument entirely (since localhost is the default).  For the
+     postgres username and password, put in the correct values, which
+     are "postgres" for both if you've been using the defaults from
+     these instructions, and similarly "checkbook" for the db name.
+     
+   **Site URL:**
+   - URL of the site (this is included in email notifications):
+
+            $conf['check_book']['data_feeds']['site_url'] = 'http://<site url>';
+
+     Replace with the URL of your Checkbook site.  (E.g., on AWS, it might
+     look something like '`<http://ec2-67-202-23-137.compute-1.amazonaws.com`').
+
+   ** File paths:**
    - Make sure this setting points to a directory that is writable by
      the user Apache HTTPD runs as:
               
@@ -363,16 +388,9 @@ Steps to install:
      Make sure to create the directory `sites/default/files/datafeeds`
      too, and ensure it's writeable by `www-data`.
 
-   - URL of the site (this is included in email notifications):
-
-            $conf['check_book']['data_feeds']['site_url'] = 'http://<site url>';
-
-     Replace with the URL of your Checkbook site.  (E.g., on AWS, it might
-     look something like '`<http://ec2-67-202-23-137.compute-1.amazonaws.com`').
-
    - Adjust location of reference data text files. This directory is
      used to write reference data files.
-
+  
             //Reference data outputDirectory
             $conf['check_book']['ref_data_dir'] = 'refdata';
 
@@ -393,20 +411,6 @@ Steps to install:
             //no of records to limit for datatables
             $conf['check_book']['datatables']['iTotalDisplayRecords'] = 200000;
 
-   - Update the psql command in the obvious ways.  Again, there is no actual
-     backslash nor linebreak after it:
-
-            // update the command for psql.
-            $conf['check_book']['data_feeds']['command'] = \
-            'PGPASSWORD=<password> psql -h <postgres-db-ip> -U <postgres-db-user> <postgresdb-name>'
-
-     If you're just running PostgreSQL on the same server, you can
-     either specify `-h localhost` or remove the `-h` option and
-     argument entirely (since localhost is the default).  For the
-     postgres username and password, put in the correct values, which
-     are "postgres" for both if you've been using the defaults from
-     these instructions, and similarly "checkbook" for the db name.
-     
 11. Optionally install Fonts.
 
     *This step is optional.  Without it, Checkbook just won't look
