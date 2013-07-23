@@ -112,19 +112,19 @@ The following assumptions are also made about the installation:
 
 Steps to install:
 
-1. Make sure the right ports are open on your server.
+1.  Make sure the right ports are open on your server.
 
- Ports 80 and 8080 will need to be opened.  If you plan to SSH in to
- the server to do the rest of this installation, you'll also need port
- 22 open for SSH.
+    Ports 80 and 8080 will need to be opened.  If you plan to SSH in to
+    the server to do the rest of this installation, you'll also need port
+    22 open for SSH.
 
- (Note that if you're deploying on Amazon Web Services, port 22 may
- not be open by default; you would typically open it up via the AWS
- security group.)
+    (Note that if you're deploying on Amazon Web Services, port 22 may
+    not be open by default; you would typically open it up via the AWS
+    security group.)
 
-2. Ensure you have the necessary dependencies installed.
+2.  Ensure you have the necessary dependencies installed.
 
- On Ubuntu 12.04 Server, that looks like this:
+    On Ubuntu 12.04 Server, that looks like this:
 
           $ sudo apt-get update
           $ sudo apt-get install php5
@@ -142,35 +142,35 @@ Steps to install:
           $ sudo apt-get install openjdk-6-jre-headless
           $ sudo apt-get install zip
 
- Debian GNU/Linux would be pretty similar to the above.  For other
- operating systems, you'll have to translate the above to the native
- package management system.
+    Debian GNU/Linux would be pretty similar to the above.  For other
+    operating systems, you'll have to translate the above to the native
+    package management system.
 
- *Note: the process of installing Apache Solr will be described
- later, as Checkbook currently installs Solr in an unusual way.*
+    *Note: the process of installing Apache Solr will be described
+    later, as Checkbook currently installs Solr in an unusual way.*
 
-3. Download the latest version of the base Checkbook code:
+3.  Download the latest version of the base Checkbook code:
    
          $ git clone https://github.com/NYCComptroller/Checkbook.git
 
- (It doesn't matter where you put it; later installation steps will
- copy the relevant parts to the appropriate destinations.)
+    (It doesn't matter where you put it; later installation steps will
+    copy the relevant parts to the appropriate destinations.)
 
-4. Install the Drupal app.
+4.  Install the Drupal app.
 
- The next steps will look familiar if you've installed Drupal before.
- We'll copy the contents of the folder `source/webapp/` to the webroot
- directory, such that the top level inside the webroot looks like the
- top level inside `source/webapp/` (i.e., looks like the top of a
- Drupal tree).
+    The next steps will look familiar if you've installed Drupal before.
+    We'll copy the contents of the folder `source/webapp/` to the webroot
+    directory, such that the top level inside the webroot looks like the
+    top level inside `source/webapp/` (i.e., looks like the top of a
+    Drupal tree).
 
- First, make sure there's nothing in the way at the destination:
+    First, make sure there's nothing in the way at the destination:
 
           $ ls /var/www/html
           No such file or directory
 
- Good.  Next, create the `/var/www/html` directory by copying the
- webapp from Checkbook:
+    Good.  Next, create the `/var/www/html` directory by copying the
+    webapp from Checkbook:
 
           $ sudo su www-data
           $ cp -a source/webapp /var/www/html
@@ -182,64 +182,64 @@ Steps to install:
           includes/     INSTALL.sqlite.txt modules/        sites/     xmlrpc.php
           $ 
 
- (This assumes that directory `/var/www/` exists and is owned by user
- `www-data` and group `www-data`.  If that's not the case, you may
- need to properly create and set permissions on the destination.  On
- Ubuntu 12.04, `sudo chown -R www-data.www-data /var/www` would be one
- way to do that.)
+    (This assumes that directory `/var/www/` exists and is owned by user
+    `www-data` and group `www-data`.  If that's not the case, you may
+    need to properly create and set permissions on the destination.  On
+    Ubuntu 12.04, `sudo chown -R www-data.www-data /var/www` would be one
+    way to do that.)
 
- Finally, copy the `default.settings.php` file to
- `settings.php`. There is no actual line break below nor backslash --
- the backslash just indicates that the line continues:
+    Finally, copy the `default.settings.php` file to
+    `settings.php`. There is no actual line break below nor backslash --
+    the backslash just indicates that the line continues:
 
           $ cp /var/www/html/sites/default/default.settings.php \
                /var/www/html/sites/default/settings.php
 
- (We'll edit `settings.php` later.)
+    (We'll edit `settings.php` later.)
 
-5. Bring over some third-party libraries.
+5.  Bring over some third-party libraries.
 
- **Highcharts:**
-  - Download version 3.0.1 from <http://www.highcharts.com/products/highcharts>
+    **Highcharts:**
+    - Download version 3.0.1 from <http://www.highcharts.com/products/highcharts>
 
               $ wget http://www.highcharts.com/downloads/zips/Highcharts-3.0.1.zip
 
-  - Unpack it into the appropriate place in the web application:
+    - Unpack it into the appropriate place in the web application:
 
               $ mkdir -p /var/www/html/sites/all/modules/custom/widget_framework/widget_highcharts/highcharts/
               $ unzip Highcharts-3.0.1.zip -d \
                 /var/www/html/sites/all/modules/custom/widget_framework/widget_highcharts/highcharts/3.0.1
 
-     (That creates the "3.0.1" destination dir.)
-  - Verify that it is unpacked into the right place, by checking that the path to `highcharts.src.js` is `/var/www/html/sites/all/modules/custom/widget_framework/widget_highcharts/highcharts/3.0.1/js/highcharts.src.js`:
+      (That creates the "3.0.1" destination dir.)
+    - Verify that it is unpacked into the right place, by checking that the path to `highcharts.src.js` is `/var/www/html/sites/all/modules/custom/widget_framework/widget_highcharts/highcharts/3.0.1/js/highcharts.src.js`:
 
               $ ls /var/www/html/sites/all/modules/custom/widget_framework/widget_highcharts/highcharts/3.0.1/js/highcharts.src.js
 
- **Highstock:**
-  - Download version 1.2.4 from <http://www.highcharts.com/products/highstock>
+    **Highstock:**
+    - Download version 1.2.4 from <http://www.highcharts.com/products/highstock>
 
               $ wget http://www.highcharts.com/downloads/zips/Highstock-1.2.4.zip
 
-  - Unpack it into `/var/www/html/sites/all/modules/custom/widget_framework/widget_highcharts/highstock/1.2.4`
+    - Unpack it into `/var/www/html/sites/all/modules/custom/widget_framework/widget_highcharts/highstock/1.2.4`
 
               $ mkdir -p /var/www/html/sites/all/modules/custom/widget_framework/widget_highcharts/highstock/
               $ unzip Highstock-1.2.4.zip -d \
                 /var/www/html/sites/all/modules/custom/widget_framework/widget_highcharts/highstock/1.2.4
 
-  - Verify that it is unpacked correctly into the right place, by checking that the path to `highstock.src.js` is `/var/www/html/sites/all/modules/custom/widget_framework/widget_highcharts/highstock/1.2.4/js/highstock.src.js`:
+    - Verify that it is unpacked correctly into the right place, by checking that the path to `highstock.src.js` is `/var/www/html/sites/all/modules/custom/widget_framework/widget_highcharts/highstock/1.2.4/js/highstock.src.js`:
 
               $ ls /var/www/html/sites/all/modules/custom/widget_framework/widget_highcharts/highstock/1.2.4/js/highstock.src.js
 
- Note that these Highcharts and Highstock downloads are available at
- no charge, but they are not licensed under open source licenses.
- We are actively seeking open source replacements to recommend in
- these installation instructions, and welcome suggestions.  Ideally
- such replacements would be drop-in compatible, but if they are not we
- will consider making the necessary code adjustments.
+    Note that these Highcharts and Highstock downloads are available at
+    no charge, but they are not licensed under open source licenses.
+    We are actively seeking open source replacements to recommend in
+    these installation instructions, and welcome suggestions.  Ideally
+    such replacements would be drop-in compatible, but if they are not we
+    will consider making the necessary code adjustments.
 
-6. Install the Drupal (MySQL) database.
+6.  Install the Drupal (MySQL) database.
 
- Create and import the database into MySQL using the following commands:
+    Create and import the database into MySQL using the following commands:
 
           $ mysql -u root -p
             _(enter the MySQL password for the MySQL root user)_
@@ -250,21 +250,21 @@ Steps to install:
           mysql> source data/checkbook_drupal.sql
           mysql> quit;
 
- *Notes:*
+    *Notes:*
 
- The path `data/checkbook_drupal.sql` is relative to the top of this
- source tree; you may need to give an absolute path or a different
- relative path when you issue the MySQL `source` command above,
- depending on where you invoked mysql.
+    The path `data/checkbook_drupal.sql` is relative to the top of this
+    source tree; you may need to give an absolute path or a different
+    relative path when you issue the MySQL `source` command above,
+    depending on where you invoked mysql.
 
- In this demo, we are givig the MySQL user "checkbook@localhost" the
- password 'checkbook', to match the default setting in
- `/var/www/html/sites/default/settings.php`.  For a production
- installation, you would want to use a better password of course.
+    In this demo, we are givig the MySQL user "checkbook@localhost" the
+    password 'checkbook', to match the default setting in
+    `/var/www/html/sites/default/settings.php`.  For a production
+    installation, you would want to use a better password of course.
 
-7. Install the Checkbook (PostgreSQL) database.
+7.  Install the Checkbook (PostgreSQL) database.
 
- Create and import the database into PostgreSQL using the following commands:
+    Create and import the database into PostgreSQL using the following commands:
 
           $ cd data
           $ unzip checkbook_demo_database_for_postgres_db_20130524.zip
@@ -278,29 +278,29 @@ Steps to install:
             _(to exit from the database interactive prompt)_
           $ psql checkbook -f data/checkbook_demo_database_for_postgres_db_20130524.sql
 
- *Notes:*
+    *Notes:*
 
- The demo dataset loaded above assumes the PostgreSQL database user
- `postgres`, and the default settings.php file assumes that user's
- password is 'postgres' too.  Both of these should be changed in
- production, and ideally even our demo dataset should not assume a
- particular database username (and certainly not assume the admin user
- 'postgres').  However, until that's fixed, these instructions are
- accurate.
+    The demo dataset loaded above assumes the PostgreSQL database user
+    `postgres`, and the default settings.php file assumes that user's
+    password is 'postgres' too.  Both of these should be changed in
+    production, and ideally even our demo dataset should not assume a
+    particular database username (and certainly not assume the admin user
+    'postgres').  However, until that's fixed, these instructions are
+    accurate.
 
- The sample data set contains sanitized data for testing Checkbook --
- you would not load it into a production instance.  We plan to better
- document the process for loading real data into production instances.
- These documentation files describe more about the process of
- importing data and running a production instance:
+    The sample data set contains sanitized data for testing Checkbook --
+    you would not load it into a production instance.  We plan to better
+    document the process for loading real data into production instances.
+    These documentation files describe more about the process of
+    importing data and running a production instance:
 
           documentation/Creating new Database and running ETL Job.docx
           documentation/Data Mapping  4_29_2013.xlsx
           documentation/NYC Checkbook2 ETL Implementation Approach_2013_29_01.docx
 
-8. Check the basic database settings in `settings.php`.
+8.  Check the basic database settings in `settings.php`.
 
- Look for this text in `/var/www/html/sites/default/settings.php`:
+    Look for this text in `/var/www/html/sites/default/settings.php`:
 
           $databases = array(
               'default' => array(
@@ -328,119 +328,119 @@ Steps to install:
               ),
           );
      
- If any of the settings don't look right for you, fix them.  (However,
- the default settings provided there should work assuming you used the
- defaults in the rest of these instructions.)
+    If any of the settings don't look right for you, fix them.  (However,
+    the default settings provided there should work assuming you used the
+    defaults in the rest of these instructions.)
 
-9. Install Solr.
+9.  Install Solr.
 
- Please refer to SOLR-INSTALL.md for Solr installation instructions.
+    Please refer to SOLR-INSTALL.md for Solr installation instructions.
 
 10. Configure the rest of the webapp's `settings.php`.
 
- * URL of Solr instance:
+    * URL of Solr instance:
 
             //Solr URL
             $conf['check_book']['solr']['url'] = 'http://<solr server ip>:<solr server port>/<solr instance name>/';
 
+      You can change the value to "`http://localhost:8080/solr-checkbook`",
+      assuming a deployment where everything runs on one server.
 
-     You can change the value to "`http://localhost:8080/solr-checkbook`",
-     assuming a deployment where everything runs on one server.
-
- * Make sure this setting points to a directory that is writable by
-   the user Apache HTTPD runs as:
+    * Make sure this setting points to a directory that is writable by
+      the user Apache HTTPD runs as:
               
             $conf['check_book']['data_feeds']['db_file_dir'] = '/data/datafeeds';
 
-     This is an absolute path.  You don't have to use
-     `/data/datafeeds`; another plausible location is
-     '/var/www/html/sites/default/files/db_file_dir'.  Whatever value
-     you use, make sure to create that directory and ensure it's
-     writeable by user `www-data`.
+      This is an absolute path.  You don't have to use
+      `/data/datafeeds`; another plausible location is
+      '/var/www/html/sites/default/files/db_file_dir'.  Whatever value
+      you use, make sure to create that directory and ensure it's
+      writeable by user `www-data`.
 
- * Adjust this setting if you want the files generated by datafeeds to
-   be in a different directory than the default:
+    * Adjust this setting if you want the files generated by datafeeds to
+      be in a different directory than the default:
 
             //relative directory path to 'sites/default/files' to store generated files
             $conf['check_book']['data_feeds']['output_file_dir'] = 'datafeeds';
 
-     Make sure to create the directory `sites/default/files/datafeeds`
-     too, and ensure it's writeable by `www-data`.
+      Make sure to create the directory `sites/default/files/datafeeds`
+      too, and ensure it's writeable by `www-data`.
 
- * URL of the site (this is included in email notifications):
+    * URL of the site (this is included in email notifications):
 
             $conf['check_book']['data_feeds']['site_url'] = 'http://<site url>';
 
-     Replace with the URL of your Checkbook site.  (E.g., on AWS, it might
-     look something like '`<http://ec2-67-202-23-137.compute-1.amazonaws.com`').
+      Replace with the URL of your Checkbook site.  (E.g., on AWS, it might
+      look something like '`<http://ec2-67-202-23-137.compute-1.amazonaws.com`').
 
- * Adjust location of reference data text files. This directory is used to write reference data files.
+    * Adjust location of reference data text files. This directory is
+      used to write reference data files.
 
             //Reference data outputDirectory
             $conf['check_book']['ref_data_dir'] = 'refdata';
 
-     Make sure to create the directory `sites/default/files/refdata`
-     too, and ensure it's writeable by `www-data`.
+      Make sure to create the directory `sites/default/files/refdata`
+      too, and ensure it's writeable by `www-data`.
 
- * Optionally adjust where temporary files are written when doing an
-   export through the application:
+    * Optionally adjust where temporary files are written when doing an
+      export through the application:
 
             //Export data outputDirectory
             $conf['check_book']['export_data_dir'] = 'exportdata';
 
-     Make sure to create the directory `sites/default/files/refdata`
-     too, and ensure it's writeable by `www-data`.
+      Make sure to create the directory `sites/default/files/refdata`
+      too, and ensure it's writeable by `www-data`.
 
- * This setting is used to limit the number of records for the export file:
+    * This setting is used to limit the number of records for the export file:
 
             //no of records to limit for datatables
             $conf['check_book']['datatables']['iTotalDisplayRecords'] = 200000;
 
- * Update the psql command in the obvious ways.  Again, there is no actual
-   backslash nor linebreak after it:
+    * Update the psql command in the obvious ways.  Again, there is no actual
+      backslash nor linebreak after it:
 
             // update the command for psql.
             $conf['check_book']['data_feeds']['command'] = \
             'PGPASSWORD=<password> psql -h <postgres-db-ip> -U <postgres-db-user> <postgresdb-name>'
 
-     If you're just running PostgreSQL on the same server, you can
-     either specify `-h localhost` or remove the `-h` option and
-     argument entirely (since localhost is the default).  For the
-     postgres username and password, put in the correct values
-     ("postgres" for both, if you've been using the defaults from
-     these instructions), and similarly "checkbook" for the db name.
+      If you're just running PostgreSQL on the same server, you can
+      either specify `-h localhost` or remove the `-h` option and
+      argument entirely (since localhost is the default).  For the
+      postgres username and password, put in the correct values
+      ("postgres" for both, if you've been using the defaults from
+      these instructions), and similarly "checkbook" for the db name.
 
 10. Install or Modify Fonts.
 
- *You can skip this step.  Checkbook will still work, it just won't
- look quite the same as it looks at <http://checkbooknyc.com/>, and if
- you look at your site with an in-browser debugger such as Firebug,
- you'll see some warnings as fonts are requested and not found.*
+    *You can skip this step.  Checkbook will still work, it just won't
+    look quite the same as it looks at <http://checkbooknyc.com/>, and if
+    you look at your site with an in-browser debugger such as Firebug,
+    you'll see some warnings as fonts are requested and not found.*
 
- On its New York City production instance at checkbooknyc.com,
- Checkbook uses Novecento Wide Normal font.  This font can be
- downloaded from
- <http://www.myfonts.com/fonts/synthview/novecento/wide-normal/buy.html>.
- Once downloaded, the following font files
+    On its New York City production instance at checkbooknyc.com,
+    Checkbook uses Novecento Wide Normal font.  This font can be
+    downloaded from
+    <http://www.myfonts.com/fonts/synthview/novecento/wide-normal/buy.html>.
+    Once downloaded, the following font files
 
           Novecentowide-Normal-webfont.eot
           Novecentowide-Normal-webfont.svg
           Novecentowide-Normal-webfont.ttf
           Novecentowide-Normal-webfont.woff  
 
-  should be copied into
+    should be copied into
 
           /var/www/html/sites/all/themes/checkbook3/fonts/
 
-  Fonts on the site can be changed by editing these files:
+    Fonts on the site can be changed by editing these files:
 
           /var/www/html/sites/all/themes/checkbook3/fonts/fonts.css
           /var/www/html/sites/all/themes/checkbook3/css/fontfamily.css
 
 11. Set up cron jobs.
 
-  Use `crontab -e` to add the following entries to crontab (again,
-  backslashes escape line breaks):
+    Use `crontab -e` to add the following entries to crontab (again,
+    backslashes escape line breaks):
 
           */15 * * * * www-data /usr/bin/drush                                 \
           --root="/var/www/html" scr processQueueJob                           \
@@ -454,7 +454,7 @@ Steps to install:
 
 12. Configure Apache to serve the site.
 
- Define an httpd configuration block for the site like this:
+    Define an httpd configuration block for the site like this:
 
           <VirtualHost *:80>
             ServerAdmin webmaster@localhost
@@ -468,15 +468,15 @@ Steps to install:
             AllowOverride all
           </Directory>
 
- On Ubuntu 12.04 or Debian GNU/Linux, the standard is to put that in a
- file named (e.g.) `/etc/apache2/sites-available/checkbook.conf`, and
- then install it like this:
+    On Ubuntu 12.04 or Debian GNU/Linux, the standard is to put that in a
+    file named (e.g.) `/etc/apache2/sites-available/checkbook.conf`, and
+    then install it like this:
 
           $ cd /etc/apache2/sites-enabled/
           $ sudo rm 000-default  # Old default site not interesting to us now.
           $ sudo ln -s ../sites-available/checkbook.conf 000-checkbook.conf
 
- Don't forget to restart Apache:
+    Don't forget to restart Apache:
 
           $ sudo service apache2 restart
 
