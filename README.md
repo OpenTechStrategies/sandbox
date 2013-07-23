@@ -203,7 +203,6 @@ Steps to install:
     - Download version 3.0.1 from <http://www.highcharts.com/products/highcharts>
 
             $ wget http://www.highcharts.com/downloads/zips/Highcharts-3.0.1.zip
-
     - Unpack it into the appropriate place in the web application:
 
             $ mkdir -p /var/www/html/sites/all/modules/custom/widget_framework/widget_highcharts/highcharts/
